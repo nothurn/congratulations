@@ -93,8 +93,13 @@ public final class FakeAchievementToastClientEvents {
    private static void scheduleNext(RandomSource random) {
       int min = (Integer)FakeAchievementToastConfig.MIN_INTERVAL_TICKS.get();
       int max = Math.max(min, (Integer)FakeAchievementToastConfig.MAX_INTERVAL_TICKS.get());
-      int delay = min + random.nextInt(max - min + 1);
+      int delay = randomInclusive(random, min, max);
       nextToastTick = tickCounter + delay;
+   }
+
+   private static int randomInclusive(RandomSource random, int min, int max) {
+      long range = (long)max - min + 1L;
+      return min + (int)Math.floorMod(random.nextLong(), range);
    }
 
    private static void showFakeToast(Minecraft minecraft, RandomSource random) {
